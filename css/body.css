@@ -1,0 +1,163 @@
+/*=========== body主题div特征 ================*/
+html,body {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* background-color: #e6e5ca; */
+.centered-div {
+    width: 70%;
+    background-color: white;
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+    border: 1px solid #ccc;
+    /* text-align: center; */
+}
+
+
+/* background-color: rgb(19, 154, 172); */
+/* ================= logo容器 =================*/
+.logo{
+    background-color: rgb(88, 165, 175);
+    height: 100px;
+    border: 1px solid black;
+}
+/* logo容器中的图片 */
+.logo img{
+    position: relative;
+    height: 100%;
+    top: 0;
+    left: 0;
+    }
+
+
+/* ================= 分割线 ==================*/
+.solid-line {
+    border-bottom: 0.1 solid black;
+    width : 90%; 
+}
+
+
+/* ================= 标题设置 =============== */
+h1 {    
+    /* background-color: #ccc; */
+    padding: 10px;
+    /* border: 3px solid #ccc; */
+    text-align: center;
+    color: rgb(0, 119, 255);
+}
+
+h2,h3{
+    text-indent: 1em;
+    color: rgb(0, 119, 255);
+}
+
+h4 {
+    text-indent: 2em;
+    color: rgb(0, 119, 255);
+}
+
+h5 {
+    text-indent: 2em;
+    color: rgb(0, 119, 255);
+}
+
+/* ================= 内容字体设置 ================*/
+p {
+    font-size: 16px;
+    text-indent: 2em; /* 设置首行缩进为文本容器宽度的10% */
+    padding-left: 80px;
+    padding-right: 80px;
+    font-family: Arial, Helvetica, sans-serif;
+    /* font-weight: lighter; */
+}
+
+.p_img{
+    padding-left: 180px;
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+/* ================= 图片居中 ===================== */
+.Fixed-image{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.centered-div .image-container {
+            border: 0.1 solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+}
+
+.image-container .side_by_side_img{
+    max-width: 48%;
+    height: auto;
+    margin: 5px; /* 图片之间的间隔 */
+    text-align: center;
+}
+
+.side_by_side_img img{
+    max-width: 80%;
+    max-height: 95%;
+}
+
+.single-img a{
+    display: flex;  
+    justify-content: center;  
+    align-items: center;
+    height: 530px;
+}  
+
+a img{  
+    max-width: 100%;  
+    max-height: 95%;  
+    text-align: center;
+}
+
+
+
+/* ==================== 表格形式设定 ===================== */
+.scrollable-div {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    max-height: 300px;
+    /* justify-content: center; */
+    /* align-items: center; */
+    overflow: auto; /* 允许滚动 */
+    border: 1px solid #ccc; /* 为 div 添加边框，可选 */
+}
+
+table {
+    border-collapse: collapse; /*设置单线条风格 */
+    width: 100%; /* 使表格占据整个容器的宽度 */
+    height: 100%;   
+}
+
+th {
+    padding: 10px; /* 设置内边距，调整内边距的大小以满足你的需求 */
+    background-color: lightblue; /* 表头背景颜色为浅蓝色 */
+    font-weight: bold; /* 表头字体加粗 */
+    text-align: center; /* 表头文本居中 */
+    border: 1px solid #000; /* 表头边框 */
+}
+
+td {
+    background-color: white;
+    text-align: center; /* 表格内文本居中 */
+    font-size: 14px;
+    padding: 2px;
+    border: 1px solid #000; /* 表格内边框 */
+}

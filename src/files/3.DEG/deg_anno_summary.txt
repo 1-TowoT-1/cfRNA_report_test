@@ -1,0 +1,2 @@
+DEG Group	Total	GO	KEGG
+A_vs_B	2000	1000	52

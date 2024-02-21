@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="zh_CN">
+    <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" href="css/body.css">
+    <script type="text/javascript" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+
+<body>
+    <div class="direction">
+        <li style="padding-left: 10px;font-size: 20px;font-weight: bold;list-style-type: none;">目录</li>
+        <ul>
+            <li><a href="#a1">背景介绍</a></li>
+        </ul>
+        <ul>
+            <li><a href="#a2">一、实验流程</a>
+                <ul>
+                    <li><a href="#b11">1.1 样品检测</a></li>
+                    <li><a href="#b12">1.2 文库构建</a></li>
+                    <li><a href="#b13">1.3 文库质控</a></li>
+                    <li><a href="#b14">1.4 上机测序</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul>
+            <li><a href="#a3">二、生物信息学分析</a>
+                <ul>
+                    <li><a href="#b21">2.1 生物信息流程</a></li>
+                    <li><a href="#b22">2.2 cfRNA数据质控</a>
+                        <ul>
+                            <li><a href="#c221">2.2.1 测序数据及其质量控制</a></li>
+                            <li><a href="#c222">2.2.2 测序碱基质量分布</a></li>
+                            <li><a href="#c223">2.2.3 测序碱基含量分布</a></li>
+                            <li><a href="#c224">2.2.4 测序数据统计方法</a></li>
+                            <li><a href="#c225">2.2.5 测序数据统计结果</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#b23">2.3 cfRNA数据与参考基因组序列比对</a>
+                        <ul>
+                            <li><a href="#c231">2.3.1 基因组上Reads分布</a></li>
+                            <li><a href="#c232">2.3.2 插入片段检验</a></li>
+                            <li><a href="#c233">2.3.3 数据饱和度检验</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#b24">2.4 基因表达定量</a>
+                        <ul>
+                            <li><a href="#c241">2.4.1 基因表达定量</a></li>
+                            <li><a href="#c242">2.4.2 不同RNA类型的占比</a></li>
+                            <li><a href="#c243">2.4.3 基因表达水平</a></li>
+                            <li><a href="#c244">2.4.4 样本重复性评估</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#b25">2.5 差异分析</a>
+                        <ul>
+                            <li><a href="#c251">2.5.1 差异分析结果统计</a></li>
+                            <li><a href="#c252">2.5.2 差异聚类分析</a></li>
+                            <li><a href="#c253">2.5.3 差异分析功能注释和富集分析</a></li>
+                            <li><a href="#c254">2.5.4 差异基因蛋白互作网络</a></li>
+                            <li><a href="#c255">2.5.5 GSEA富集分析</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#b26">2.6 差异lncRNA与mRNA互作</a></li>
+                    <li><a href="#b27">2.7 circRNA鉴定</a>
+                        <ul>
+                            <li><a href="#c271">2.7.1 CIRCexplorer检测</a></li>
+                            <li><a href="#c272">2.7.2 circRNA外显子分布</a></li>
+                            <li><a href="#c273">2.7.3 circRNA注释</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <ul>
+            <li><a href="#a4">三、参考文献</a></li>
+        </ul>
+    </div>
+    <div class="centered-div">
+        <div class="logo">
+            <!-- <a href={{logo}}> -->
+            <!-- <img src={{logo}} alt="公司logo"  height="100px" width="180px"> -->
+            <img src={{logo}} alt="公司logo">
+            <!-- </a> -->
+        </div>
+
+        <h1>{{title}}</h1>
+        <!-- <br> -->
+        <hr class="solid-line" align="center">
+
+        <br>
+        <h2 id="a1">背景介绍</h2>
+        <p>血液中的循环游离RNA(Cell-free RNA) 主要来源于细胞的主动分泌、细胞凋亡和坏死细胞释放。它是对肿瘤生长的全身反应的一种表现，具有区分不同癌症类型的潜在研究价值，并提供有关肿瘤起源组织的信息。随着高通量测序技术的不断进步，循环游离RNA（Cell-free RNA）已在疾病发生的机制研究、生物标志物的筛选以及药物研发等领域发挥出巨大的临床应用潜力。已经有很多研究证明了循环游离RNA在妊娠、肿瘤、神经退行性疾病等领域的预测、早期筛查、辅助诊断、治疗效果监测等方面的应用潜力。cfRNA 由多种类型的 RNA 构成，根据分子长度的不同，cfRNA大致可以划分为两大类：小RNA和长RNA。小RNA长度约为 18-40 nt，最长不超过200n，包括以下几种主要亚型：微小RNA（miRNA）、piwi相互作用RNA（piRNA）、tRNA衍生的小RNA（tsRNA）还有rRNA衍生的小 RNA（rsRNA）。长RNA的长度则往往可以达到数百到数千nt，主要包括mRNA、长非编码RNA（lncRNA）和环状RNA（circRNA）。</p>
+        <p>本报告旨在研究cfRNA的长RNA在肝癌样本和健康样本中的差异表达，结果可以作为早期癌症筛查的候选标志物参考。</p>
+        <hr class="solid-line" align="center">
+
+        <br>
+        <h2 id="a2">一、实验流程</h2>
+        <h3 id="b11">1.1 样品检测</h3>
+        <p>采用安捷伦2100检测RNA样品的浓度、完整性和降解程度，以保障使用合格的样品进行转录组测序。</p>
+        <h3 id="b12">1.2 文库构建</h3>
+        <p>样品检测合格后，进行文库构建，主要流程如下：</p>
+        <p>（1）根据RNA的质量确定是否需要进行片段化；</p>
+        <p>（2）片段化（或不片段化）之后以总RNA为模板，用随机引物（random hexamers）合成第一条cDNA链；</p>
+        <p>（3）添加Illumina接头，并加入SeqAmp CB PCR Buffer和 SeqAmp DNA Polymerase合成第二条cDNA链，利用NucleoMag beads纯化cDNA；</p>
+        <p>（4）纯化完之后用ZapR™ v3 and R-Probes v3进行核糖体cDNA的去除；</p>
+        <p>（5）最后通过PCR富集得到cDNA文库并用NucleoMag beads纯化文库。</p>
+        <h3 id="b13">1.3 文库质控</h3>
+        <p>文库构建完成后，使用Qubit对文库的有效浓度（文库有效浓度＞2nM）进行准确定量，以保证文库质量。</p>
+        <h3 id="b14">1.4 上机测序</h3>
+        <p>库检合格后，不同文库按照目标下机数据量进行pooling，用Illumina平台进行测序。</p>
+        <p>cfRNA实验流程图如下：</p>
+        <div class="Fixed-image">
+            <a href={{Experimental_process}} target="_blank">
+                <img src={{Experimental_process}} width="280px" height="500px">
+            </a>
+        </div>
+        <p ></p>
+        <p style="text-align: center;">图 cfRNA实验流程图</p>
+        <hr class="solid-line" align="center">
+
+        <br>
+        <h2 id="a3">二、生物信息学分析</h2>
+        <br>
+        <h3 id="b21">2.1 生物信息流程</h3>
+        <p>将下机的cfRNA数据进行过滤，过滤得到Clean Data，过滤指标包含核糖体、接头、测序质量等信息；得到的Clean Data与各种RNA类型的数据库比对，得到过滤了miRNA、piRNA、tRNA、rRNA的Map Data；进行Reads的分布展示、插入片段长度检验、数据饱和度评估；进行基因定量，表达水平展示，样本的重复性评估，PCA评估，用以核查是否存在异常离群样本；根据分组进行差异分析，将差异表达的基因注释与富集；根据现有数据库进行差异lncRNA的注释；circRNA的鉴定和注释。
+        </p>
+        <p>cfRNA分析流程如下：</p>
+        <div class="Fixed-image">
+            <a href={{pipeline}} target="_blank">
+                <img src=logo/pipeline.png width="800px" height="600px">
+            </a>
+        </div>
+        <p style="text-align: center;">图 cfRNA生信分析流程图</p>
+
+
+
+
+
+
+
+
+
+<!--============================== 质控 ================================ -->
+        <br>
+        <h3 id="b22">2.2 cfRNA数据质控</h3>
+        <h4 id="c221">2.2.1 测序数据及其质量控制</h4>
+        <p>基于边合成边测序（Sequencing By Synthesis，SBS）技术，Illumina 高通量测序平台对cDNA文库进行测序，产出大量的高质量Data，称为原始数据（Raw Data），其大部分碱基质量打分能达到或超过Q30。</p>
+        <p>Raw Data通常以FASTQ格式提供，每个测序样品的Raw Data包括两个FASTQ文件，分别包含所有cDNA片段两端测定的Reads。</p>
+        <p>FASTQ格式文件示意图如下：</p>
+        <div class="Fixed-image">
+            <a href={{QC}} target="_blank">
+                <img src=logo/质控.png width="850px" height="300px">
+            </a>
+        </div>
+        <p class="p_img">注：FASTQ文件中通常每4行对应一个序列单元：</p>
+        <p class="p_img">（1）第一行以@开头，后面接着序列标识（ID）以及其它可选的描述信息；</p>
+        <p class="p_img">（2）第二行为碱基序列，即Reads；</p>
+        <p class="p_img">（3）第三行以“+”开头，后面接着可选的描述信息；</p>
+        <p class="p_img">（4）第四行为Reads每个碱基对应的质量打分编码，长度必须和Reads的序列长度相同，该行中每个字符对应的。</p>
+        
+
+
+        <h4 id="c222">2.2.2 测序碱基质量分布</h4>
+        <p>碱基质量分布检查用于检测整体样本的reads碱基有没有出现某些区段较低的情况，以此来排除异常。</p>
+        <p>碱基质量值（Quality Score或Q-score）是碱基识别（Base Calling）出错的概率的整数映射。通常使用的Phred碱基质量值公式为：</p>
+        <div text-align="center">
+            <p style="text-align:center;">\(Q = -10 * log10(P)\)</p>
+        </div>
+        <p>其中，P为碱基识别出错的概率。</p>
+        <p>碱基质量值越高表明碱基识别越可靠，准确度越高。比如，对于碱基质量值为Q20的碱基识别，100个碱基中有1个会识别出错，以此类推。</p>
+        <p>FastQC（Fast Quality Control） 是一个用于快速检查测序数据质量的工具。它接受原始的 DNA 测序数据作为输入，生成详细的质量报告，以帮助研究人员评估数据的质量并采取相应的处理步骤。</p>
+        <p>详细信息见"1.QC/*_per_base_quality.png"，单个样本的rawdata碱基错误率分布如图所示：</p>
+        <div class="image-container">
+            <div class="side_by_side_img">
+                <a href={{base_R1}} target="_blank">
+                    <img src={{base_R1}} alt="Image 1">
+                    <p>{{eg_sample_name}}_R1</p>
+                </a>    
+            </div>
+            <div class="side_by_side_img">
+                <a href={{base_R2}} target="_blank">
+                    <img src={{base_R2}} alt="Image 2">
+                    <p>{{eg_sample_name}}_R2</p>
+                </a>
+            </div>
+        </div>
+        <p style="text-align: center;">图 样本RawData碱基错误率分布图</p>
+        <p class="p_img">注：横坐标是read上各碱基的位置；纵坐标是reads各位置上对应碱基的质量Q值</p>
+
+        <h4 id="c223">2.2.3 测序碱基含量分布</h4>
+        <p>碱基类型分布检查用于检测有无AT、GC分离现象，由于Reads 5’端的前几个碱基为随机引物序列存在一定的偏好性，在碱基分布图中出现前端波动较大的现象。</p>
+        <p>详细信息见"1.QC/*_per_base_sequence_content.png"，单个样本的rawdata碱基含量分布图如图所示：</p>
+        <div class="image-container">
+            <div class="side_by_side_img">
+                <a href={{GC_R1}} target="_blank">
+                    <img src={{GC_R1}} alt="Image 1">
+                    <p>{{eg_sample_name}}_R1</p>
+                </a>    
+            </div>
+            <div class="side_by_side_img">
+                <a href={{GC_R2}} target="_blank">
+                    <img src={{GC_R2}} alt="Image 2">
+                    <p>{{eg_sample_name}}_R2</p>
+                </a>
+            </div>
+        </div>
+        <p style="text-align: center;">图 样本RawData ATCG含量分布图</p>
+        <p class="p_img">注：横坐标为Reads的碱基位置；纵坐标为单碱基所占比例。</p>
+
+
+
+        <h4 id="c224">2.2.4 测序数据统计方法</h4>
+        <p>进行数据分析之前，需要确保这些Reads有足够高的质量，以保证后续分析的准确。对数据进行严格的质量控制，进行如下过滤方式：</p>
+        <p>(1) 去除含有接头的Reads；</p>
+        <p>(2) 去除低质量的Reads（去除质量值Q&lt;=25的碱基数占整条Read的50%以上的Reads，同时去除长度低于15bp的Reads）。</p>
+        <p>本项目使用trim_galore（version 0.6.10）去除所述游离RNA序列的接头序列和低质量序列，得到高质量序列。</p>
+        <p>经过上述操作后的数据可以得到高质量的Clean Data。</p>
+        <p>详细信息见"1.QC/*clean_per_base_quality.png"，单个样本的cleandata碱基错误率分布如图所示：</p>
+        <div class="image-container">
+            <div class="side_by_side_img">
+                <a href={{clean_base_R1}} target="_blank">
+                    <img src={{clean_base_R1}} alt="Image 1">
+                    <p>{{eg_sample_name}}_clean_R1</p>
+                </a>    
+            </div>
+            <div class="side_by_side_img">
+                <a href={{clean_base_R2}} target="_blank">
+                    <img src={{clean_base_R2}} alt="Image 2">
+                    <p>{{eg_sample_name}}_clean_R2</p>
+                </a>
+            </div>
+        </div>
+        <p style="text-align: center;">图 样本CleanData碱基错误率分布图</p>
+        <p class="p_img">注：横坐标是read上各碱基的位置；纵坐标是reads各位置上对应碱基的质量Q值</p>
+        <p>详细信息见"1.QC/*clean_per_base_sequence_content.png"，单个样本的cleandata碱基含量分布图如图所示：</p>
+        <div class="image-container">
+            <div class="side_by_side_img">
+                <a href={{clean_GC_R1}} target="_blank">
+                    <img src={{clean_GC_R1}} alt="Image 1">
+                    <p>{{eg_sample_name}}_clean_R1</p>
+                </a>    
+            </div>
+            <div class="side_by_side_img">
+                <a href={{clean_GC_R2}} target="_blank">
+                    <img src={{clean_GC_R2}} alt="Image 2">
+                    <p>{{eg_sample_name}}_clean_R2</p>
+                </a>
+            </div>
+        </div>
+        <p style="text-align: center;">图 样本CleanData ATCG含量分布图</p>
+        
+
+        <h4 id="c225">2.2.5 测序数据统计结果</h4>
+        <p>详细信息见"1.QC/qc_summary.xls"，各样品数据产出统计见下表，样本过多时，该表上限展示40个样本。</p>
+        <div class="scrollable-div">
+            <table>
+                <tr>
+                    <th>Sample</th>
+                    <th>Raw_Seq_Num</th>
+                    <th>Raw_bases_Num(Gbp)</th>
+                    <th>Clean_Seq_Num</th>
+                    <th>Clean_bases_Num(Gbp)</th>
+                    <th>Clean_Q20(%)</th>
+                    <th>Clean_Q30(%)</th>
+                </tr>
+                {% for row in QC_result %}
+                <tr>
+                    <td>{{row.Sample}}</td>
+                    <td>{{row.Raw_Seq_Num}}</td>
+                    <td>{{row['Raw_bases_Num(Gbp)']}}</td>
+                    <td>{{row.Clean_Seq_Num}}</td>
+                    <td>{{row['Clean_bases_Num(Gbp)']}}</td>
+                    <td>{{row['Clean_Q20(%)']}}</td>
+                    <td>{{row['Clean_Q30(%)']}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p class="p_img">注：（1）Sample：样本的名称</p>
+        <p class="p_img">（2）Raw_Seq_Num：样本的raw数据的reads数目</p>
+        <p class="p_img">（3）Raw_bases_Num(Gbp)：样本的raw数据的bases数目</p>
+        <p class="p_img">（4）Clean_Seq_Num：样本的clean数据的reads数目</p>
+        <p class="p_img">（5）Clean_bases_Num(Gbp)：样本的clean数据的bases数目</p>
+        
+
+
+
+
+
+
+
+
+
+<!--============================== 序列比对 ================================ -->
+        <br>
+        <h3 id="b23">2.3 cfRNA数据与参考基因组序列比对</h3>
+        <p>本项目使用的人类基因组版本是GRCh38.p13，gff注释版本为Gencode.v34。</p>
+        <p>使用bowtie2对Clean Data进行数据库比对：</p>
+        <p>（1）<a href="https://ftp.ncbi.nlm.nih.gov/pub/UniVec/UniVec" target="_blank" style="color: rgb(0, 119, 255);text-decoration: none;">UniVec数据库</a>：分离、过滤实验过程中可能引入的载体序列污染</p>
+        <p>（2）<a href="https://www.ncbi.nlm.nih.gov/nuccore" target="_blank" style="color: rgb(0, 119, 255);text-decoration: none;">rRNA数据库</a>：分离、过滤rRNA、YRNA</p>
+        <p>（3）<a href="https://www.mirbase.org/download/" target="_blank" style="color: rgb(0, 119, 255);text-decoration: none;">miRNA数据库</a>：分离、过滤miRNA</p>
+        <p>（4）<a href="http://gtrnadb.ucsc.edu/genomes/eukaryota/Hsapi38/" target="_blank" style="color: rgb(0, 119, 255);text-decoration: none;">tRNA数据库</a>：分离、过滤tRNA</p>
+        <p>（5）<a href="http://bigdata.ibp.ac.cn/piRBase/download/v3.0/" target="_blank" style="color: rgb(0, 119, 255);text-decoration: none;">piRNA数据库</a>：分离、过滤piRNA</p>
+        <!-- <p>使用STAR对过滤后的数据进行比对，STAR拥有极高的比对速度，同时也具有很高的准确度，STAR算法包括两个主要的步骤：seed searching step 和 clustering/stitching/scoring step。这些算法令其成为RNA高通量序列比对的最好选择之一。本项目设置比对上基因组的碱基数至少为15，比对上的碱基数目占比reads总长度至少为0.9，最多只允许1个碱基错配，只输出unique比对并且去除了duplacation的结果--Genome_Rmdup_Num用做后续分析。</p> -->
+        <p>使用STAR对过滤后的数据进行比对，本项目设置比对上基因组的碱基数至少为15，比对上的碱基数目占比reads总长度至少为0.9，最多只允许1个碱基错配，只输出unique比对并且去除了duplacation的结果 —— Genome_Rmdup_Num 用做后续分析。</p>
+        <p>详细结果见"2.MAP/summary.xls"，比对结果见下表，样本过多时，该表上限展示40个样本。</p>
+        <div class="scrollable-div">
+            <table>
+                <tr>
+                    <th>Sample</th>
+                    <th>Clean_Num</th>
+                    <!-- <th>Clean_bases_Num(Gbp)</th> -->
+                    <th>UniVec_Num</th>
+                    <th>rRNA_Num</th>
+                    <th>miRNA_Num</th>
+                    <th>tRNA_Num</th>
+                    <th>piRNA_Num</th>
+                    <th>Genome_Num</th>
+                    <th>Genome_Rmdup_Num</th>
+                </tr>
+                {% for row in summary %}
+                <tr>
+                    <td>{{row.Sample}}</td>
+                    <td>{{row.Clean_Seq_Num}}</td>
+                    <!-- <td>{{row['Clean_bases_Num(Gbp)']}}</td> -->
+                    <td>{{row.UniVec_Seq_Num}}</td>
+                    <td>{{row.rRNA_Seq_Num}}</td>
+                    <td>{{row.miRNA_Seq_Num}}</td>
+                    <td>{{row.tRNA_Seq_Num}}</td>
+                    <td>{{row.piRNA_Seq_Num}}</td>
+                    <td>{{row.Genome_Seq_Num}}</td>
+                    <td>{{row.Genome_Rmdup_Seq_Num}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p class="p_img">注：（1）Sample：样本的名称</p>
+        <p class="p_img">（2）Clean_Num：样本的clean数据的reads数目</p>
+        <!-- <p class="p_img">（3）Clean_bases_Num(Gbp)：样本的clean数据的bases数目</p> -->
+        <p class="p_img">（3）*RNA_Num：各种RNA类型数据的reads数目以及其占前一位过滤后reads数目的比例</p>
+        <p class="p_img">（4）Genome_Num：所有reads成功比对到基因组上的比例</p>
+        <p class="p_img">（5）Genome_Rmdup_Num：去除了dupication的reads成功比对到基因组上的比例</p>
+
+
+
+        <h4 id="c231">2.3.1 基因组上Reads分布</h4>
+        <p>统计Map reads即Genome_Rmdup_Num在参考基因组中不同元件（外显子、内含子、基因间区）中的占比。</p>
+        <p>详细结果见"2.MAP/*_read_distribution_pie_plot.png"，单个样本结果展示如下图：</p>
+        <div class="single-img">
+            <a href={{element}} target="_blank">
+                <img src={{element}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 单个样本测序Reads的基因组分布图</p>
+        <p class="p_img">注：样本的Reads在基因组上各个区域的分布</p>
+        <!-- <p>理论上由于cfRNA的组成是游离在血液中的RNA，不仅存在成熟的RNA，还包含了RNA前体，但是主体还是以成熟RNA为主。</p> -->
+
+
+        <h4 id="c232">2.3.2 插入片段检验</h4>
+        <p>插入片段可以反应文库制备过程中真实测序片段的长度，检验文库制备是否存在问题。通过两端的Reads与参考基因组做比对，使用比对上的起始和结束的位置来计算插入片段的长度。根据主峰和cfRNA片段的特征可以对文库制备进行校验。</p>
+        <!-- <p>由于人类是真核生物，真核生物的外显子被内含子隔断，所以会出现起始终止位置的计算值大于真实测序片段长度的情况，但整体会呈现出一个突出的主峰，根据主峰和cfRNA片段的特征可以对文库制备进行校验。</p> -->
+        <p>详细结果见"2.MAP/*_fragment.png"，单个样本插入片段长度如下图：</p>
+        <div class="single-img">
+            <a href="{{insertsize}}" target="_blank">
+                <img src={{insertsize}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 单个样本插入片段检验图</p>
+        <p class="p_img">注：横坐标是插入片段的长度；纵坐标是对应插入片段长度的数目占比总片段数目的密度值。</p>
+
+
+        <h4 id="c233">2.3.3 数据饱和度检验</h4>
+        <p>任何样本统计表达量的精度都会受到样本大小（测序深度）的影响；“重采样”是一种通过使用可用数据子集来估计样本统计精度的方法。使用RSeQC的RPKM_saturation模块，从样本总RNA读数中重新采样一系列子集，然后使用每个子集计算RPKM值。我们能够在基因表达方面评估当前测序深度是否饱和（或者RPKM值是否稳定）。如果测序深度饱和，RPKM值将是固定的或可重复的。默认情况下，该模块会根据样本的MAP Data计算总的RPKM值，将基因根据表达量的高低分类成Q1-Q4，每一个层级都是四分之一等分，同时为抽取的转录本计算20个 RPKM 值（使用总读数的 5%、10%、…、95%、100%）。</p>
+        <p>详细结果见"2.MAP/*.saturation.png"，单个样本数据饱和度检验结果如下图：</p>
+        <div class="single-img">
+            <a href={{saturation}} target="_blank">
+                <img src={{saturation}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 单个样本测序数据饱和检验图</p>
+        <p class="p_img">注：横坐标是抽取样本Reads的百分比；纵坐标是“误差百分比”，用于测量从Reads子集估计的RPKM如何偏离真实表达水平。</p>
+
+
+
+
+
+
+
+
+
+<!--============================== 基因表达定量 ================================ -->
+        <br>
+        <h3 id="b24">2.4 基因表达定量</h3>
+        <h4 id="c241">2.4.1 基因表达定量</h4>
+        <p>为了让片段数目能真实地反映转录本表达水平，纠正系统偏差和文库大小差异的影响，需要对样品中的Mapped Reads的数目和转录本长度进行归一化。本项目使用的是TMM算法，标准化之后的数据用于样本之间的比较。</p>
+        <p>TMM计算公式如下：</p>
+        <div text-align="center">
+            <p style="text-align:center;">\(TMM = RawCounts * 10^6 / LibrarySize * NormFactor\)</p>
+        </div>
+        <p class="p_img">公式中，RawCounts表示比对到某一转录本上的片段数目，即双端Reads数目；LibrarySize表示文库的大小，这里表示每个样本的总碱基数目；NormFactor表示标准化因子。</p>
+        <p>所有样本标准化结果文件：
+            <a href={{TMM_file}} target="_blank" style="color: red;">
+                {{TMM_file_name}}
+            </a>
+        </p>
+        <p class="p_img">注： 第一列表示基因 ID,其余各列表示基因在不同样品中的表达量(TMM)。</p>
+        
+
+        <h4 id="c242">2.4.2 不同RNA类型的占比</h4>
+        <p>通过基因注释得到有定量结果的基因RNA类型，根据其类型进行分类，查看不同RNA类型基因的占比。</p>
+        <p>详细结果见"3.EXP/exp_gene_type_pie_plot.png"，表达基因中不同RNA类型占比如下图：</p>
+        <div class="single-img">
+            <a href={{Gene_class}} target="_blank">
+                <img src={{Gene_class}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 RNA注释到Gene的类型</p>
+        <p class="p_img">注：mRNA和lncRNA以及其他基因类型的占比，基因对应类型根据人类基因组注释gff文件得到。</p>
+
+
+        <h4 id="c243">2.4.3 基因表达水平</h4>
+        <p>根据总表达量文件，可视化更加直接观测样本的表达情况。</p>
+        <p>详细结果见"3.EXP/All_sample_Boxplot.png"，基因表达箱线图结果如下图：</p>
+        <div class="single-img">
+            <a href={{Box_exp}} target="_blank">    
+                <img src={{Box_exp}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 基因表达箱线图</p>
+        <p class="p_img">注：横坐标是样本名称；纵坐标是表达量的log10值。</p>
+        <p>详细结果见"3.EXP/TMM_Density.png"，基因表达密度图如下图：</p>
+        <div class="single-img">
+            <a href={{Density_exp}} target="_blank">    
+                <img src={{Density_exp}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 基因表达量密度分布曲线</p>
+        <p class="p_img">注：横坐标是表达量的TMM标准化的log10值；纵坐标不同表达量对应基因数目密度占比。</p>
+        
+        
+        <h4 id="c244">2.4.4 样本重复性评估</h4>
+        <p>基因表达在同一物种的不同个体中也存在着生物学可变性（Biological Variability），所以生物学重复对生物实验尤为重要。尽可能多的生物学重复就可以尽量避免个体差异带来的误差。</p>
+        <p>样品间基因表达水平相关性是检验实验可靠性和样本选择是否合理的重要指标。相关系数越接近于 1，表明样品之间表达模式的相似度越高。理想的取样和生物实验要求生物学重复的皮尔森相关系数（Pearson correlation coefficient）的平方（R2）大于 0.8。如若有组内差异较大样本，可能需要考虑剔除异常样本后，再进行后续分析。</p>
+        <p>详细结果见"3.EXP/All_sample_Cor.png"，相关性图结果如下图：</p>
+        <div class="single-img">
+            <a href={{Density_exp}} target="_blank">    
+                <img src={{Correlation}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 样本之间相关性热图</p>
+        <p>PCA（principal components analysis）即主成分分析技术，又称主分量分析，旨在利用降维的思想，把多指标转化为少数几个综合指标。样本数据属于高纬度数据，通过PCA降维，可以将数据降低到二维平面去观察各个样本在主成分中的分布，通常情况下，同组样本之间的间距比较小，聚合在一起，而不同组的样本较为分离。</p>
+        <p>详细结果见"3.EXP/PCA.png"，PCA图结果如下图：</p>
+        <div class="single-img">
+            <a href={{PCA}} target="_blank">    
+                <img src={{PCA}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 样本降维PCA图</p>
+        <p class="p_img">注：横坐标是主成分一，为最能代表样本分类的特征，括号里面的百分比为代表的百分数值，值越高代表的越显著。纵坐标是主成分二，为排名第二能代表样本分类的特征。</p>
+
+        
+
+
+
+
+
+
+
+
+<!--============================== 差异分析 ================================ -->
+        <br>
+        <h3 id="b25">2.5 差异分析</h3>
+        <p>基因表达具有时间和空间特异性，在两个不同条件下，表达水平存在显著差异的基因或转录本，称之为差异表达基因（DEG）。在生物学和分子生物学研究中，研究基因表达的差异性通常是为了了解不同条件下基因的调控情况，识别与特定生物学过程或疾病相关的差异表达基因，以及揭示潜在的生物学机制。</p>
+        <h4 id="c251">2.5.1 差异分析结果统计</h4>
+        <p>样本组之间通过WilcoxonTest进行差异分析，获取两个生物学条件之间的差异表达基因集；对于没有生物学重复的样本使用edgeR进行差异分析。在差异表达基因检测过程中，将Fold Change≥2且FDR<0.05作为筛选标准。差异倍数（Fold Change）表示两样品（组）间表达量的比值。错误发现率（False Discovery Rate，FDR）是通过对差异显著性p值（p-value）进行校正得到的。</p>
+        <p>所有样本差异分析结果文件：
+            <a href={{DEG_file}} target="_blank" style="color: red;">
+                {{DEG_file_name}}
+            </a>
+        </p>
+        <p>差异表达基因统计表格如下：</p>
+        <div class="scrollable-div">
+            <table>
+                <tr>
+                    <th>DEG Group</th>
+                    <th>DEG gene number</th>
+                    <th>up number</th>
+                    <th>down number</th>
+                </tr>
+                {% for row in DEG_summary %}
+                <tr>
+                    <td>{{row['DEG Group']}}</td>
+                    <td>{{row['DEG gene number']}}</td>
+                    <td>{{row['Up gene number']}}</td>
+                    <td>{{row['Down gene number']}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p class="p_img">注：DEG Group：差异表达基因集名称；DEG gene number：差异表达基因数目；up number：上调基因的数目；down number：下调基因数目。</p>
+        <p>通过火山图（Volcano Plot）可以快速查看基因在两个（组）样本中水平的差异，观察上下调基因的个数，和差异大小分布。横轴表示基因的表达差异（通常是对数变换的折叠变化），纵轴表示基因的显著性（通常是统计学上的显著性，例如负对数的FDR值）。</p>
+        <p>详细结果见"4.DEG/treat_vs_control_volcano.png"，差异基因火山图结果如下图：</p>         
+        <div class="single-img">
+            <a href={{volcano}} target="_blank">    
+                <img src={{volcano}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 差异基因火山图</p>
+        <p class="p_img">注：差异表达火山图中的每一个点表示一个基因，横坐标表示某一个基因在两样品中表达量差异倍数的log2对数值；纵坐标表示基因表达量变化的统计学显著性的负对数值。横坐标绝对值越大，说明表达量在两样品间的表达量倍数差异越大；纵坐标值越大，表明差异表达越显著，筛选得到的差异表达基因越可靠。图中绿色的点代表下调差异表达基因，红色的点代表上调差异表达基因，灰色的点代表非差异表达基因。</p>
+
+
+        <h4 id="c252">2.5.2 差异聚类分析</h4>
+        <p>详细结果见"4.DEG/treat_vs_control_heatmap.png"，对筛选出来的差异基因做层次聚类分析，聚类热图结果如下图：</p>
+        <div class="single-img">
+            <a href={{DEG_heatmap}} target="_blank">    
+                <img src={{DEG_heatmap}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 差异基因聚类热图</p>
+        <p class="p_img">注：横坐标是样本名称；纵坐标是样本基因的聚类结果。图中一行表示一个基因在不同样本中的表达情况，表达情况相似的会通过聚类的方式聚集展示。</p>
+
+
+        <h4 id="c253">2.5.3 差异分析功能注释和富集分析</h4>
+        <p>GO（Gene Ontology）数据库是一个广泛应用于生物信息学和生物学研究的资源数据库，旨在对基因和蛋白质的功能进行统一和标准化的注释。该数据库主要包括三个层次的术语，涵盖了分子功能、细胞组分和生物过程，以帮助研究人员理解基因和蛋白质在生物学中的功能和相互关系。</p>
+        <p>KEGG（Kyoto Encyclopedia of Genes and Genomes）数据库是一个包含生物系统信息的综合性数据库，KEGG数据库的应用涵盖了基因功能注释、代谢途径分析、药物研究、疾病研究等多个领域。研究人员可以通过KEGG来获取全面的生物信息，从而更好地理解和探索生物学系统。</p>
+        <p>富集分析是一种用于解释高通量生物学实验数据的方法，主要用于识别在给定实验条件下具有显著富集的生物学特征，如基因、代谢途径、蛋白质功能等。富集分析可以将大量的基因或蛋白质列表与已知的功能注释和生物学信息联系起来。通过富集分析，可以了解实验中涉及的生物学特征的功能和相关性以及代谢通路特征等。帮助研究人员理解实验结果中哪些生物学特征在给定条件下发挥关键作用。这有助于揭示实验的生物学意义和潜在的机制。</p>
+        <p>对差异基因进行GO、KEGG数据库的功能注释，各组差异基因注释结果见下表：</p>
+        <div class="scrollable-div">
+            <table>
+                <tr>
+                    <th>DEG Group</th>
+                    <th>Total</th>
+                    <th>GO</th>
+                    <th>KEGG</th>
+                </tr>
+                {% for row in DEG_anno_summary %}
+                <tr>
+                    <td>{{row['DEG Group']}}</td>
+                    <td>{{row['Total']}}</td>
+                    <td>{{row['GO']}}</td>
+                    <td>{{row['KEGG']}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+
+        <h5>GO注释富集分析</h5>
+        <p>GO数据库的功能结构是一个有向无环图，通过三个大功能往下面延伸子节点，从上到下功能越来越具体。</p>
+        <p>详细结果见"4.DEG/GO_Anno.png"，GO的注释结果图如下图：</p>
+        <p>所有差异基因注释到GO数据库结果文件见"4.DEG/*_GO_Anno.xls"，GO一级功能注释展示图结果如下图：</p>
+        <div class="single-img">
+            <a href={{GO_Anno}} target="_blank">    
+                <img src={{GO_Anno}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 差异基因GO注释图</p>
+        <p class="p_img">注：分页标题表示三个0级的GO分类，横坐标表示在此分类下面的一级子功能；纵坐标表示该功能注释到的基因数目。</p>
+        <p>详细结果见"4.DEG/*_GOenrich_*.xls"，差异基因分上下调富集结果，差异基因的上调GO富集分析气泡图如下图：</p>
+        <div class="single-img">
+            <a href={{GO_Enrich_up_bubble}} target="_blank">    
+                <img src={{GO_Enrich_up_bubble}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 上调差异基因GO富集气泡图</p>
+        <p>差异基因的下调GO富集分析气泡图如下图：</p>
+        <div class="single-img">
+            <a href={{GO_Enrich_down_bubble}} target="_blank">    
+                <img src={{GO_Enrich_down_bubble}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 下调差异基因GO富集气泡图</p>
+        <p class="p_img">注：横坐标是富集因子，“富集因子”是一个指标，用于衡量某个基因集中的基因在特定生物学过程、分子功能或细胞组件中是否富集。；纵坐标是GO富集的功能p值最显著的功能展示。气泡大小代表基因数目的多少，颜色代表p值显著性，红色代表显著，绿色代表不显著。</p>
+        <h5>KEGG注释富集分析</h5>
+        <p>KEGG 数据库中的 "通路"（Pathway）是指一系列与生物学功能、代谢、信号传导等相关的生物分子相互作用和参与的网络。通路包含了对细胞中特定功能的生物学过程的详细描述。</p>
+        <p>所有差异基因注释到KEGG数据库结果文件见"4.DEG/*_KEGG_Anno.xls"，KEGG Pathway每个类别中最显著的通路展示图结果如下图：</p>
+        <div class="single-img">
+            <a href={{KEGG_Anno}} target="_blank">    
+                <img src={{KEGG_Anno}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 差异基因KEGG注释图</p>
+        <p class="p_img">注：横坐标是注释到对应通路的基因数目；纵坐标是在不同的KEGG通路大分类中，最显著的几个通路展示。</p>
+        <p>详细结果见"4.DEG/*_KEGGenrich_*.xls"，差异基因分上下调富集结果，差异基因的上调KEGG富集分析气泡图如下图：</p>
+        <div class="single-img">
+            <a href={{KEGG_Enrich_up_bubble}} target="_blank">    
+                <img src={{KEGG_Enrich_up_bubble}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 上调差异基因KEGG富集气泡图</p>
+        <p>差异基因的下调KEGG富集分析气泡图如下图：</p>
+        <div class="single-img">
+            <a href={{KEGG_Enrich_down_bubble}} target="_blank">    
+                <img src={{KEGG_Enrich_down_bubble}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 下调差异基因KEGG富集气泡图</p>
+        <p class="p_img">注：横坐标是富集因子，“富集因子”是一个指标，用于衡量某个基因集中的基因在特定生物学过程、分子功能或细胞组件中是否富集。；纵坐标是KEGG富集的通路p值最显著的通路展示。气泡大小代表基因数目的多少，颜色代表p值显著性，红色代表显著，绿色代表不显著。</p>
+        <div class="single-img">
+            <a href={{KEGG_map}} target="_blank">    
+                <img src={{KEGG_map}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 差异基因KEGG通路图</p>
+        <!-- <p class="p_img">注：这个图什么含义</p> -->    
+
+
+        <h4 id="c254">2.5.4 差异基因蛋白互作网络</h4>
+        <p>String数据库是一个专注于蛋白质互作和功能注释的生物信息学数据库。该数据库提供了全面的蛋白质互作信息，包括已知和预测的蛋白质相互作用、蛋白质功能注释以及关联的生物学通路信息。研究人员可以通过String数据库来深入了解蛋白质之间的相互作用，发现新的生物学功能以及理解生物学通路中的关键因子。这对于理解细胞信号传导、疾病机制等方面的生物学问题具有重要意义。</p>
+        <p>利用 string 数据库对上下调差异基因分析蛋白互作关系，若差异基因较多，随机抽取200个差异基因进行互作关系的分析作图，蛋白互作表格使用完整的差异基因列表分析。</p>
+        <p>详细结果见"4.DEG/String/network_relation.xls"，表格部分结果展示如下：</p>
+        <div class="scrollable-div">
+            <table>
+                <tr>
+                    <th>preferredName_A</th>
+                    <th>preferredName_B</th>
+                    <th>stringId_A</th>
+                    <th>stringId_B</th>
+                    <th>score</th>
+                </tr>
+                {% for row in PPI_dat %}
+                <tr>
+                    <td>{{row['preferredName_A']}}</td>
+                    <td>{{row['preferredName_B']}}</td>
+                    <td>{{row['stringId_A']}}</td>
+                    <td>{{row['stringId_B']}}</td>
+                    <td>{{row['score']}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p class="p_img">注：（1）preferredName_A：差异基因的名称</p>
+        <p class="p_img">（2）preferredName_B：目标互作基因的名称</p>
+        <p class="p_img">（3）stringId_A：A基因对应String数据库中的蛋白ID</p>
+        <p class="p_img">（4）stringId_B：B基因对应String数据库中的蛋白ID</p>
+        <p class="p_img">（5）score：对互作关系之间的强弱评估，越强分数越高。</p>
+        <p>详细结果见"4.DEG/String/network_image.png"，String自带功能绘制关系网络图结果如下图：</p>
+        <div class="single-img">
+            <a href={{PPI_plot}} target="_blank">    
+                <img src={{PPI_plot}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 差异基因蛋白互作网络图</p>
+        <!-- <p class="p_img">注：这个图什么含义</p> -->
+
+
+        <h4 id="c255">2.5.5 GSEA富集分析</h4>
+        <p>GSEA是一种用于解释基因表达数据的分析方法。它的主要目标是检测在不同实验条件下基因集的统计显著性变化。与传统的基因差异分析方法不同，GSEA关注的是整个基因集的集体变化，而不仅仅是单个基因的表达水平变化。GSEA不依赖于预先定义的表达阈值，而是根据基因在整个表达谱中的排名来评估其在基因集中的富集程度。使用GO、KEGG和MsigDB数据库的注释信息对我们的所有有表达的基因做GSEA分析，来评判出在特定通路或者功能上哪些基因子集表现突出。</p>
+        <p>各数据库做完GSEA分析后p<0.05显著的结果功能或通路表格见结果"4.DEG/GSEA/*_GSEA.xls"。</p>
+        <p>详细结果见"result/4.DEG/GSEA/*.png"，GSEA分析部分结果展示图如下图：</p>
+        <div class="single-img">
+            <a href={{GSEA_plot}} target="_blank">    
+                <img src={{GSEA_plot}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 特定通路或功能的GSEA结果图</p>
+        <p class="p_img">注：图标题代表GO Term/KEGG Pathway/MsigDB Function的名称，横坐标代表排序后的基因集的位置信息，横坐标中的黑色竖线代表该GO Term/KEGG Pathway/MsigDB Function中的基因；上图纵坐标为动态的富集打分，绿色的曲线代表每个位置上基因集合的富集打分，绿色曲线的峰值即为该GO Term/KEGG Pathway的ES值；下图纵坐标为排序量（log2FC），黑色竖线的高低代表该GO Term/KEGG Pathway/MsigDB Function中基因的log2FC的大小</p>
+
+
+
+
+
+
+
+        
+<!--============================== lncRNA分析 ================================ -->
+        <h3 id="b26">2.6 差异lncRNA与mRNA互作</h3>
+        <p>ENCORI代表ENcyclopedia of RNA Interactomes，是一个用于研究RNA互作的数据库和分析平台。ENCORI提供了综合的RNA互作信息，包括多种RNA互作，例如miRNA与mRNA、lncRNA与mRNA、circRNA与miRNA等。</p>
+        <p>利用ENCORI数据库已知的关系对，对得到的差异基因中类型为lncRNA的基因做与mRNA的互作关系研究。</p>
+        <p>详细结果见"5.lncRNA/DEG_lncRNA_mRNA_relation.xls"，差异的lncRNA与mRNA的部分结果如下表：</p>
+        <!-- <div class="single-img">
+            <a href={{lncRNA_mRNA}} target="_blank">    
+                <img src={{lncRNA_mRNA}} alt="">
+            </a>
+        </div> -->
+        <div class="scrollable-div">
+            <table>
+                <tr>
+                    <th>geneID</th>
+                    <th>geneName</th>
+                    <th>geneType</th>
+                    <th>pairGeneID</th>
+                    <th>pairGeneName</th>
+                    <th>pairGeneType</th>
+                    <th>interactionNum</th>
+                    <!-- <th>totalExpNum</th>
+                    <th>totalSeqTypeNum</th>
+                    <th>totalReadsNum</th>
+                    <th>interactionLocus</th>
+                    <th>alignment</th> -->
+                    <!-- <th>expNum</th> -->
+                    <!-- <th>seqTypeNum</th> -->
+                    <!-- <th>readsNum</th> -->
+                    <th>FreeEnergy</th>
+                    <th>AlignScore(Smith-Waterman)</th>
+                    <!-- <th>CellLine/Tissue</th> -->
+                </tr>
+                {% for row in lncRNA_mRNA %}
+                <tr>
+                    <td>{{row['geneID']}}</td>
+                    <td>{{row['geneName']}}</td>
+                    <td>{{row['geneType']}}</td>
+                    <td>{{row['pairGeneID']}}</td>
+                    <td>{{row['pairGeneName']}}</td>
+                    <td>{{row['pairGeneType']}}</td>
+                    <td>{{row['interactionNum']}}</td>
+                    <!-- <td>{{row['totalExpNum']}}</td>
+                    <td>{{row['totalSeqTypeNum']}}</td>
+                    <td>{{row['totalReadsNum']}}</td>
+                    <td>{{row['interactionLocus']}}</td>
+                    <td>{{row['alignment']}}</td>
+                    <td>{{row['expNum']}}</td>
+                    <td>{{row['seqTypeNum']}}</td>
+                    <td>{{row['readsNum']}}</td> -->
+                    <td>{{row['FreeEnergy']}}</td>
+                    <td>{{row['AlignScore(Smith-Waterman)']}}</td>
+                    <!-- <td>{{row['CellLine/Tissue']}}</td> -->
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p class="p_img">注：（1）geneID：差异lncRNA的基因ID</p>
+	<p class="p_img">（2）geneName：差异lncRNA的基因名称</p>
+	<p class="p_img">（3）geneType：基因的类型</p>
+	<p class="p_img">（4）pairGeneID：目标基因ID</p>
+	<p class="p_img">（5）pairGeneName：目标基因名称</p>
+	<p class="p_img">（6）pairGeneType：目标基因类型</p>
+    <p class="p_img">（7）interactionNum：关联数目</p>
+	<p class="p_img">（8）FreeEnergy：自由能</p>
+	<p class="p_img">（9）AlignScore：配对得分，Smith-Waterman算法计算得来</p>
+
+
+
+
+
+
+
+
+
+
+<!--============================== circRNA分析 ================================ -->
+        <h3 id="b27">2.7 circRNA鉴定</h3>
+        <p>循环RNA（circular RNA，circRNA）是一类特殊的RNA分子，其分子结构呈环形闭合，与线性RNA不同，circRNA的两端通过较强的共价键连接在一起，形成封闭的环状结构。circRNA的发现和研究在RNA领域引起了广泛关注，因为它们在基因表达和调控中具有一些独特的特征和功能。由于其环形结构，circRNA相对于线性RNA更加稳定，这种稳定性使得circRNA在细胞中具有较长的半衰期，可能在细胞中存在更久，所以其在cfRNA中可能存在比较稳定的结构,我们这里即探究cfRNA中存在哪些circRNA，同时对其进行注释，观察这些鉴定到的circRNA有何种功能。</p>
+        <h4 id="c271">2.7.1 CIRCexplorer检测</h4>
+        <p>CIRCexplorer2是一个用于分析和可视化circRNA的工具，它能够从高通量测序数据中识别和定量circRNA，并提供了相关的分析和可视化功能。工具提供基因注释信息，帮助用户了解circRNA的来源基因和其在基因结构中的位置。使用该软件对每个样本单独进行circRNA预测。</p>
+        <p>详细结果见"6.circRNA/parse_circ2explorer2/*/circularRNA.xls"，单个样本circRNA预测部分结果如下表：</p>
+        <!-- <div class="single-img">
+            <a href={{circRNA_identify}} target="_blank">    
+                <img src={{circRNA_identify}} alt="">
+            </a>
+        </div> -->
+        <div class="scrollable-div">
+            <table>
+                <tr>
+                    <th>circID</th>
+                    <th>reads</th>
+                    <th>exonCount</th>
+                    <th>exonSizes</th>
+                    <th>exonOffsets</th>
+                    <th>circType</th>
+                </tr>
+                {% for row in circRNA_identify %}
+                <tr>
+                    <td>{{row['circID']}}</td>
+                    <td>{{row['reads']}}</td>
+                    <td>{{row['exonCount']}}</td>
+                    <td>{{row['exonSizes']}}</td>
+                    <td>{{row['exonOffsets']}}</td>
+                    <td>{{row['circType']}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p class="p_img">注：（1）circID：鉴定的circRNA在基因组上的位置信息</p>
+	<p class="p_img">（2）reads：鉴定的circRNA上的reads数目</p>
+	<p class="p_img">（3）exonCount：鉴定的circRNA上的外显子数目</p>
+	<p class="p_img">（4）exonSizes：外显子数目的长度</p>
+	<p class="p_img">（5）exonOffsets：外显子偏移</p>
+	<p class="p_img">（6）circType：鉴定的circRNA的类型</p>
+        
+
+        <h4 id="c272">2.7.2 circRNA外显子分布</h4>
+        <p>详细结果见"6.circRNA/*/circRNA_exon_num.png"，单个样本鉴定到的circRNA外显子分布图如下，</p>
+        <div class="single-img">
+            <a href={{circRNA_exon_num}} target="_blank">    
+                <img src={{circRNA_exon_num}} alt="">
+            </a>
+        </div>
+        <p style="text-align: center;">图 单个样本鉴定的circRNA外显子分布图</p>
+        <p class="p_img">注：横坐标是circRNA上外显子数目的分类；纵坐标是不同外显子数目对应的circRNA的数目</p>
+
+
+        <h4 id="c273">2.7.3 circRNA注释</h4>
+        <!-- <h5>circbase数据库注释</h5> -->
+        <p>CircBase是一个专门用于收集、注释和可视化circRNA信息的数据库,它涵盖了多种物种的circRNA信息，并提供了这些circRNA在不同组织和细胞中的表达模式，提供了相关文献的引用，帮助用户了解数据的来源和相关研究。使用它对上面鉴定到的circRNA结果进一步注释。</p>
+        <p>详细结果见"6.circRNA/*/circularRNA_anno.xls"，单个样本部分注释结果见如下表：</p>
+        <div class="scrollable-div">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>circRNA ID</th>
+                    <th>genomic length</th>
+                    <th>spliced seq length</th>
+                    <th>samples</th>
+                    <th>repeats</th>
+                    <th>annotation</th>
+                    <th>best transcript</th>
+                    <th>gene symbol</th>
+                    <th>circRNA study</th>
+                </tr>
+                {% for row in circRNA_Anno %}
+                <tr>
+                    <td>{{row['ID']}}</td>
+                    <td>{{row['circRNA ID']}}</td>
+                    <td>{{row['genomic length']}}</td>
+                    <td>{{row['spliced seq length']}}</td>
+                    <td>{{row['samples']}}</td>
+                    <td>{{row['repeats']}}</td>
+                    <td>{{row['annotation']}}</td>
+                    <td>{{row['best transcript']}}</td>
+                    <td>{{row['gene symbol']}}</td>
+                    <td>{{row['circRNA study']}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p class="p_img">注：（1）ID：鉴定的circRNA ID</p>
+	<p class="p_img">（2）circRNA ID：circbase数据库中对应的circRNA ID</p>
+	<p class="p_img">（3）genomic length：源头的长度信息</p>
+	<p class="p_img">（4）spliced seq length：circRNA的长度信息</p>
+	<p class="p_img">（5）samples：circbase数据库中检测结果的样本信息</p>
+	<p class="p_img">（6）repeats：有无重复</p>
+	<p class="p_img">（7）annotation：circRNA的注释信息</p>
+	<p class="p_img">（8）best transcript：circRNA所在的最佳转录本</p>
+	<p class="p_img">（9）circRNA study：circbase数据库中检测相关研究</p>
+
+
+
+
+
+
+
+<!--============================== 总结 ================================ -->
+        <hr class="solid-line" align="center">
+        <br>
+        <h2 id="a4">三、参考文献</h2>
+        <ul>
+            <li>1. Ashburner M, Ball C A, Blake J A, et al. Gene ontology: tool for the unification of biology. Nature genetics. 2000, 25(1): 25-29.</li>
+            <li>2. Xie C, Mao X, Huang J, et al. KOBAS 2.0: a web server for annotation and identification of enriched pathways and diseases. Nucleic acids research, 2011, 39(suppl 2): W316-W322.</li>
+            <li>3. Apweiler R, Bairoch A, Wu CH, et al. UniProt: the universal protein knowledgebase. Nucleic acids research. 2004, 32: D115-D119.</li>
+            <li>4. Djebali S, Davis CA, Merkel A, et al. Landscape of transcription in human cells. Nature. 2012, 489(7414): 101-108.</li>
+            <li>5. Franceschini A, Szklarczyk D, Frankild S, et al. STRING v9. 1: protein-protein interaction networks, with increased coverage and integration. Nucleic acids research. 2013, 41: D808-D815.</li>
+            <li>6. McKenna A, Hanna M, Banks E, et al. The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data. Genome Research. 2010, 20(9): 1297-1303.</li>
+            <li>7. Anders S, Reyes A, Huber W. Detecting differential usage of exons from RNA-seq data. Genome research, 2012, 22(10): 2008-2017.</li>
+            <li>8. Deng YY, Li JQ, Wu SF, Zhu YP, et al. Integrated nr Database in Protein Annotation System and Its Localization. Computer Engineering. 2006, 32(5):71-74.</li>
+            <li>9. Kanehisa, M., & Goto, S. (2000). KEGG: kyoto encyclopedia of genes and genomes. Nucleic acids research, 28(1), 27-30.</li>
+            <li>10. Andrews, S. (2010). FastQC: a quality control tool for high throughput sequence data.</li>
+            <li>11.  Bolger A M , Lohse M , Usadel B . Trimmomatic: a flexible trimmer for Illumina sequence data[J]. Bioinformatics, 2014, 30(15):2114-2120.</li>
+            <li>12. Chen S, Jin Y, Wang S, Xing S, Wu Y, Tao Y, Ma Y, Zuo S, Liu X, Hu Y, Chen H, Luo Y, Xia F, Xie C, Yin J, Wang X, Liu Z, Zhang N, Zech Xu Z, Lu ZJ, Wang P. Cancer type classification using plasma cell-free RNAs derived from human and microbes. Elife. 2022 Jul 11;11:e75181.</li>
+        </ul>
+        <br>
+
+    </div>
+</body>
+</html>
